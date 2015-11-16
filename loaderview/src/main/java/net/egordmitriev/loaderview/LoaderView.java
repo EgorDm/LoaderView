@@ -1,5 +1,7 @@
 package net.egordmitriev.loaderview;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.util.AttributeSet;
@@ -17,6 +19,8 @@ public class LoaderView extends FrameLayout {
     public static final int STATE_IDLE = 1;
     public static final int STATE_ERROR = 2;
     public static final int STATE_EXTRA = 3;
+
+    protected static final int ANIMATION_DURATION = 200;
 
     /**
      * Default layout for loading state
@@ -43,6 +47,7 @@ public class LoaderView extends FrameLayout {
     /**
      * Current state
      */
+    protected int mInitialState = -1;
     protected int mCurrentState = -1;
     protected LoaderViewCallback listener;
 
@@ -87,7 +92,7 @@ public class LoaderView extends FrameLayout {
             component_layout_idle_resourceID = a.getResourceId(R.styleable.LoaderView_idle_resourceID, -1);
             component_layout_error_resourceID = a.getResourceId(R.styleable.LoaderView_error_resourceID, component_layout_error_resourceID);
             component_layout_extra_resourceID = a.getResourceId(R.styleable.LoaderView_extra_resourceID, -1);
-            mCurrentState = a.getInt(R.styleable.LoaderView_state, STATE_LOADING);
+            mInitialState = a.getInt(R.styleable.LoaderView_state, STATE_LOADING);
         } finally {
             a.recycle();
         }
@@ -100,21 +105,24 @@ public class LoaderView extends FrameLayout {
         LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         if(component_layout_loading_resourceID != -1) {
             mLoadingView = inflater.inflate(component_layout_loading_resourceID, this, false);
+            mLoadingView.setVisibility(GONE);
             this.addView(mLoadingView);
         }
         if(component_layout_idle_resourceID != -1) {
             mIdleView = inflater.inflate(component_layout_idle_resourceID, this, false);
+            mIdleView.setVisibility(GONE);
             this.addView(mIdleView);
         }
         if(component_layout_error_resourceID != -1) {
             mErrorView = inflater.inflate(component_layout_error_resourceID, this, false);
+            mErrorView.setVisibility(GONE);
             this.addView(mErrorView);
         }
         if(component_layout_extra_resourceID != -1) {
             mExtraView = inflater.inflate(component_layout_extra_resourceID, this, false);
+            mExtraView.setVisibility(GONE);
             this.addView(mExtraView);
         }
-        setState(mCurrentState, true);
 
         if(!isInEditMode()) {
             Button retryButton = (Button)mErrorView.findViewById(R.id.loaderview_retry);
@@ -127,6 +135,8 @@ public class LoaderView extends FrameLayout {
                 }
             });
         }
+
+        setState(mInitialState, true);
     }
 
     public void setState(int state) {
@@ -134,36 +144,59 @@ public class LoaderView extends FrameLayout {
     }
     public void setState(int state, boolean force) {
         if(state == mCurrentState && !force) return;
-        hideViews();
-        switch (state) {
-            case STATE_LOADING:
-                changeVisView(mLoadingView, true);
-                break;
-            case STATE_IDLE:
-                changeVisView(mIdleView, true);
-                break;
-            case STATE_ERROR:
-                changeVisView(mErrorView, true);
-                break;
-            case STATE_EXTRA:
-                changeVisView(mExtraView, true);
-                break;
-        }
-
+        changeVisibleView(getStateView(state), getStateView(mCurrentState), true);
         mCurrentState = state;
     }
 
-    protected void changeVisView(View view, boolean visible) {
+    protected View getStateView(int state) {
+        switch (state) {
+            case STATE_LOADING:
+                return mLoadingView;
+            case STATE_IDLE:
+                return mIdleView;
+            case STATE_ERROR:
+                return mErrorView;
+            case STATE_EXTRA:
+                return mExtraView;
+        }
+        return null;
+    }
+
+    protected void toggleVisibility(View view, boolean visible) {
         if(view != null) {
             view.setVisibility((visible) ? VISIBLE : GONE);
         }
     }
 
-    protected void hideViews() {
-        changeVisView(mLoadingView, false);
-        changeVisView(mIdleView, false);
-        changeVisView(mErrorView, false);
-        changeVisView(mExtraView, false);
+    protected void changeVisibleView(final View newView, final View oldView, boolean animate) {
+        if(animate && !isInEditMode()) {
+            crossfade(newView, oldView);
+        } else {
+            toggleVisibility(oldView, false);
+            toggleVisibility(newView, true);
+        }
+    }
+
+    private void crossfade(final View newView, final View oldView) {
+        newView.setAlpha(0f);
+        newView.setVisibility(View.VISIBLE);
+
+        newView.animate()
+                .alpha(1f)
+                .setDuration(ANIMATION_DURATION)
+                .setListener(null);
+
+        if(oldView != null) {
+            oldView.animate()
+                    .alpha(0f)
+                    .setDuration(ANIMATION_DURATION)
+                    .setListener(new AnimatorListenerAdapter() {
+                        @Override
+                        public void onAnimationEnd(Animator animation) {
+                            oldView.setVisibility(View.GONE);
+                        }
+                    });
+        }
     }
 
     public void setListener(LoaderViewCallback listener) {
