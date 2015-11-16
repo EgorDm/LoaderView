@@ -9,12 +9,6 @@ Loader view has two built in state layouts. One with a loader and one with an er
 
 ## Gradle
 ```
-repositories {
-    maven {
-        url 'https://dl.bintray.com/egordm/maven'
-    }
-}
-
 dependencies {
   ...
   compile 'net.egordmitriev.loaderview:loaderview:1.0@aar'
