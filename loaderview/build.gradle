@@ -9,8 +9,8 @@ android {
     defaultConfig {
         minSdkVersion 14
         targetSdkVersion 23
-        versionCode 2
-        versionName "1.1"
+        versionCode 3
+        versionName "1.2"
     }
     buildTypes {
         release {
@@ -27,7 +27,7 @@ dependencies {
 }
 
 group = 'net.egordmitriev.loaderview'
-version = '1.1'
+version = '1.2'
 
 task generateSourcesJar(type: Jar) {
     from android.sourceSets.main.java.srcDirs
@@ -60,10 +60,10 @@ bintray {
         name = 'net.egordmitriev.loaderview'
 
         version {
-            name = '1.1'
+            name = '1.2'
             desc = 'A simple LoaderView to fill your screen when something is being processed.'
             released  = new Date()
-            vcsTag = '1.1'
+            vcsTag = '1.2'
         }
 
         licenses = ['Apache-2.0']

@@ -47,5 +47,6 @@
         app:state="loading"
         app:idle_resourceID="@layout/state_success_layout"
         android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true"/>
+        android:layout_centerHorizontal="true"
+        app:error_message="Something went wrong."/>
 </RelativeLayout>

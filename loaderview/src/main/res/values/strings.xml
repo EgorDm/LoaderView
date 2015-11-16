@@ -1,5 +1,5 @@
 <resources>
     <string name="app_name">LoaderView</string>
-    <string name="error_unknown">An error occurred.</string>
-    <string name="btn_text_try_again">Try Again</string>
+    <string name="loaderview_error_unknown">An error occurred.</string>
+    <string name="loaderview_btn_text_try_again">Try Again</string>
 </resources>

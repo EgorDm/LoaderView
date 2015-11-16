@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.TextView;
 
 /**
  * Created by EgorDm on 11/15/2015.
@@ -40,6 +41,11 @@ public class LoaderView extends FrameLayout {
     protected View mErrorView;
     /**
      * Default layout for idle state
+     */
+    protected String mErrorMessage;
+
+    /**
+     * Default error message
      */
     protected int component_layout_extra_resourceID = -1;
     protected View mExtraView;
@@ -92,7 +98,9 @@ public class LoaderView extends FrameLayout {
             component_layout_idle_resourceID = a.getResourceId(R.styleable.LoaderView_idle_resourceID, -1);
             component_layout_error_resourceID = a.getResourceId(R.styleable.LoaderView_error_resourceID, component_layout_error_resourceID);
             component_layout_extra_resourceID = a.getResourceId(R.styleable.LoaderView_extra_resourceID, -1);
+            component_layout_extra_resourceID = a.getResourceId(R.styleable.LoaderView_extra_resourceID, -1);
             mInitialState = a.getInt(R.styleable.LoaderView_state, STATE_LOADING);
+            mErrorMessage = a.getString(R.styleable.LoaderView_error_message);
         } finally {
             a.recycle();
         }
@@ -116,6 +124,13 @@ public class LoaderView extends FrameLayout {
         if(component_layout_error_resourceID != -1) {
             mErrorView = inflater.inflate(component_layout_error_resourceID, this, false);
             mErrorView.setVisibility(GONE);
+            if(mErrorMessage != null) {
+                TextView errorText = (TextView) mErrorView.findViewById(R.id.loaderview_errormsg);
+                if(errorText != null) {
+                    errorText.setText(mErrorMessage);
+                }
+            }
+
             this.addView(mErrorView);
         }
         if(component_layout_extra_resourceID != -1) {
