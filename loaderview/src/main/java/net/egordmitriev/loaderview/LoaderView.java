@@ -4,6 +4,8 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.os.Bundle;
+import android.os.Parcelable;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -99,7 +101,9 @@ public class LoaderView extends FrameLayout {
             component_layout_error_resourceID = a.getResourceId(R.styleable.LoaderView_error_resourceID, component_layout_error_resourceID);
             component_layout_extra_resourceID = a.getResourceId(R.styleable.LoaderView_extra_resourceID, -1);
             component_layout_extra_resourceID = a.getResourceId(R.styleable.LoaderView_extra_resourceID, -1);
-            mInitialState = a.getInt(R.styleable.LoaderView_state, STATE_LOADING);
+            if(mInitialState == -1) {
+                mInitialState = a.getInt(R.styleable.LoaderView_state, STATE_LOADING);
+            }
             mErrorMessage = a.getString(R.styleable.LoaderView_error_message);
         } finally {
             a.recycle();
@@ -220,5 +224,24 @@ public class LoaderView extends FrameLayout {
 
     public interface LoaderViewCallback {
         void onRetryClick();
+    }
+
+    @Override
+    protected Parcelable onSaveInstanceState() {
+        Bundle bundle = new Bundle();
+        bundle.putParcelable("instance_state", super.onSaveInstanceState());
+        bundle.putInt("current_state", mCurrentState);
+        return bundle;
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Parcelable state) {
+        if(state instanceof Bundle) {
+            Bundle bundle = (Bundle) state;
+            mInitialState = bundle.getInt("current_state");
+
+            state = bundle.getParcelable("instance_state");
+        }
+        super.onRestoreInstanceState(state);
     }
 }
