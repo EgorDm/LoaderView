@@ -197,13 +197,16 @@ public class LoaderView extends FrameLayout {
     }
 
     private void crossfade(final View newView, final View oldView) {
-        newView.setAlpha(0f);
-        newView.setVisibility(View.VISIBLE);
+        if(newView != null) {
+            newView.setAlpha(0f);
+            newView.setVisibility(View.VISIBLE);
 
-        newView.animate()
-                .alpha(1f)
-                .setDuration(ANIMATION_DURATION)
-                .setListener(null);
+            newView.animate()
+                    .alpha(1f)
+                    .setDuration(ANIMATION_DURATION)
+                    .setListener(null);
+        }
+
 
         if(oldView != null) {
             oldView.animate()
