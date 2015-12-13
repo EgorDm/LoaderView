@@ -14,6 +14,8 @@ dependencies {
 ```
 <net.egordmitriev.colorizedprogressbar.ColorizedProgressBar
         android:id="@+id/progressbar"
+        style="@style/Widget.AppCompat.ProgressBar"
+        android:indeterminate="true"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:progressbar_color="#FF0000"/>
