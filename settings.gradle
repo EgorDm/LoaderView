@@ -1,1 +1,1 @@
-include ':app', ':loaderview'
+include ':app', ':loaderview', ':colorizedprogressbar'

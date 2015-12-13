@@ -9,8 +9,8 @@ android {
     defaultConfig {
         minSdkVersion 14
         targetSdkVersion 23
-        versionCode 4
-        versionName "1.3"
+        versionCode 1
+        versionName "1.0"
     }
     buildTypes {
         release {
@@ -26,8 +26,9 @@ dependencies {
     compile 'com.android.support:appcompat-v7:23.1.1'
 }
 
-group = 'net.egordmitriev.loaderview'
-version = '1.3'
+
+group = 'net.egordmitriev.colorizedprogressbar'
+version = '1.0'
 
 task generateSourcesJar(type: Jar) {
     from android.sourceSets.main.java.srcDirs
@@ -57,13 +58,13 @@ bintray {
     key = ''
     pkg {
         repo = 'maven'
-        name = 'net.egordmitriev.loaderview'
+        name = 'ColorizedProgressBar'
 
         version {
-            name = '1.3'
-            desc = 'A simple LoaderView to fill your screen when something is being processed.'
+            name = '1.0'
+            desc = 'A simple ProgressBar which a function to change it\'s color.'
             released  = new Date()
-            vcsTag = '1.3'
+            vcsTag = '1.0'
         }
 
         licenses = ['Apache-2.0']
