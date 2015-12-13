@@ -1,3 +1,24 @@
+# ColorizedProgressBar
+A simple ProgressBar which a function to change it's color.
+
+## Gradle
+```
+dependencies {
+  ...
+  compile 'net.egordmitriev.colorizedprogressbar:colorizedprogressbar:1.0'
+}
+```
+
+## Usage
+#### Adding into a layout
+```
+<net.egordmitriev.colorizedprogressbar.ColorizedProgressBar
+        android:id="@+id/progressbar"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:progressbar_color="#FF0000"/>
+```
+
 # LoaderView
 A simple LoaderView to fill your screen when something is being processed.
 
@@ -11,7 +32,7 @@ Loader view has two built in state layouts. One with a loader and one with an er
 ```
 dependencies {
   ...
-  compile 'net.egordmitriev.loaderview:loaderview:1.0@aar'
+  compile 'net.egordmitriev.loaderview:loaderview:1.3'
 }
 ```
 
